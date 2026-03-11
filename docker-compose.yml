@@ -1,8 +1,17 @@
 version: "2"
 services:
-  test-app-compose:
+  dnmonster:
+    image: amouat/dnmonster:1.1
+    networks:
+      - identidock-net
+  app:
     build: .
+    networks:
+      - identidock-net
     ports:
       - "5000:5000"
     environment:
       ENV: DEV
+networks:
+  identidock-net:
+    driver: bridge
