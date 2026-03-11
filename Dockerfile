@@ -1,15 +1,24 @@
-FROM nginx:1.29.5-trixie-perl
+FROM python:3.10-slim
 
-COPY WEB /usr/share/nginx/html
+WORKDIR /app
 
-RUN mkdir -p /etc/nginx/sites-available && \
-    mkdir -p /etc/nginx/sites-enabled
+COPY app /app
+COPY app/identidock.py .
+COPY installapp.txt .
+COPY cmd.sh .
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY sites-available/ /etc/nginx/sites-available
+RUN apt-get update && apt-get install -y \
+    gcc \
+    build-essential && \
+    rm -rf /var/lib/apt/lists/* && \
+    groupadd -r uwsgi && useradd -r -g uwsgi uwsgi && \
+    chmod +x ./cmd.sh && \
+    chown -R uwsgi:uwsgi /app
 
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-RUN ln -s /etc/nginx/sites-available/site1 /etc/nginx/sites-enabled/site1
-RUN ln -s /etc/nginx/sites-available/site2 /etc/nginx/sites-enabled/site2
+RUN pip install --no-cache-dir -r installapp.txt
 
-EXPOSE 80
+USER uwsgi
+
+EXPOSE 9090 9191
+
+CMD ["/bin/bash", "/app/cmd.sh"]

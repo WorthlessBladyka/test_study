@@ -1,0 +1,8 @@
+version: "2"
+services:
+  test-app-compose:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      ENV: DEV
