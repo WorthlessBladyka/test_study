@@ -1,5 +1,9 @@
 version: "2"
 services:
+  redis:
+    image: redis:7.4
+    networks:
+      - identidock-net
   dnmonster:
     image: amouat/dnmonster:1.1
     networks:
