@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY app /app/app
 COPY app/*.py /app/app
-COPY app/*.py /app
+
 COPY cmd.sh .
 COPY --from=building /usr/local/bin /usr/local/bin/
 COPY --from=building /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
