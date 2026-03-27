@@ -1,7 +1,8 @@
 // I WANT TO PLAY WITH YOU
 //         YOUR FRIEND, AI
-#include <stdio.h>
 #include <ncurses.h>
+
+int time_hard = 1000;
 
 // Функция физики мяча (пока не реализована)
 // int ball_place(int *x_ball, int *y_ball,
@@ -18,9 +19,18 @@ int hod(int *x_ball, int *y_ball,
     int c;
     int flag = 1;
 
+    // Устанавливаем таймаут ввода: 2000 миллисекунд (2 секунды)
+    if (time_hard > 301) time_hard -= 60;
+    timeout(time_hard);
+
     while (flag) {
         flag = 0;
-        c = getch();  // ncurses version of input
+        c = getch();  // ожидание ввода или ERR по таймауту
+
+        // Если таймаут (нет ввода) — выходим из цикла, перемещаем мяч
+        if (c == ERR) {
+            break;
+        }
 
         // Управление левой ракеткой: A – вверх, Z – вниз
         if ((c == 'a') || (c == 'A')) {
@@ -44,20 +54,23 @@ int hod(int *x_ball, int *y_ball,
         }
         // Пробел – бездействие (мяч всё равно двигается)
         else if (c == ' ') {
+            // Ничего не делаем, просто выходим с flag=0
         }
         // Любой другой символ – ошибка, повтор запроса
         else {
             flag = 1;
-            mvprintw(27, 1, "Неверный ввод");
+            printf("%d", time_hard);
             refresh();
         }
-
-        // Если введена команда движения ракетки, мяч перемещается
-        if (flag == 0) {
-            *x_ball += *dx;
-            *y_ball += *dy;
-        }
     }
+
+    // Сбрасываем таймаут в блокирующий режим для остальной программы
+    timeout(-1);
+
+    // Перемещаем мяч (при любом выходе из цикла)
+    *x_ball += *dx;
+    *y_ball += *dy;
+
     return 0;
 }
 
