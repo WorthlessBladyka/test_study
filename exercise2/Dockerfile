@@ -1,10 +1,10 @@
-FROM jenkins/jenkins:latest
+FROM jenkins/jenkins:2.556
 
 USER root
 
-RUN apt update && \
-apt install docker.io docker-compose docker-doc && \
-groupadd -g 995 docker && \
-chmod -aG docker jenkins
+RUN apt update
+RUN apt install -y docker.io docker-compose docker-doc
+RUN groupdel docker && groupadd -g 995 docker
+RUN usermod -aG docker jenkins
 
 USER jenkins
