@@ -8,4 +8,3 @@ RUN groupdel docker && groupadd -g 995 docker
 RUN usermod -aG docker jenkins
 
 USER jenkins
-
