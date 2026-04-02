@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 FROM nginx:1.29.5-trixie-perl
 
 COPY WEB /usr/share/nginx/html
@@ -13,3 +14,15 @@ RUN ln -s /etc/nginx/sites-available/site1 /etc/nginx/sites-enabled/site1
 RUN ln -s /etc/nginx/sites-available/site2 /etc/nginx/sites-enabled/site2
 
 EXPOSE 80
+=======
+FROM jenkins/jenkins:latest
+
+USER root
+
+RUN apt update && \
+apt install docker.io docker-compose docker-doc && \
+groupadd -g 995 docker && \
+chmod -aG docker jenkins
+
+USER jenkins
+>>>>>>> c9815a6 (build1)
