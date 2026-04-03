@@ -1,0 +1,1 @@
+FROM grafana/grafana:13.0.0-23826080413-ubuntu

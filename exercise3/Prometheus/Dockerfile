@@ -1,0 +1,1 @@
+FROM ubuntu/prometheus:3-24.04_stable

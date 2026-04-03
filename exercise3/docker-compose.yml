@@ -1,0 +1,26 @@
+services:
+  prometheus:
+    build: ./Prometheus
+    container_name: prometheus-test
+    networks:
+      - identidock-net
+      - log-net
+    ports:
+      - "9090:9090"
+    volumes:
+      - ~/prometheus/conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ~/prometheus/:/var/prometheus
+  grafana:
+    build: ./grafana/
+    container_name: grafana-test
+    networks:
+      - log-net
+    ports:
+      - "3000:3000"
+    volumes:
+      - ~/grafana:/var/lib/grafana 
+networks:
+  identidock-net:
+    driver: bridge
+  log-net:
+    driver: bridge
