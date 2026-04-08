@@ -1,0 +1,19 @@
+services:
+  dnmonster:
+    image: amouat/dnmonster:1.1
+    networks:
+      - identidock-net
+  reverse-proxy:
+    image: nginx:1.28.3
+    container_name: reverse_nginx
+    volumes:
+      - "./nginx:/etc/nginx"
+    ports:
+      - "8080:80"
+    networks:
+      - identidock-net
+    depends_on:
+      - dnmonster
+networks:
+  identidock-net:
+    driver: bridge
