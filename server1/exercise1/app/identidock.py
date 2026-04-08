@@ -8,7 +8,7 @@ cache = redis.StrictRedis( host='redis', port=6379, db=0 )
 salt = "UNIQUE_SALT"
 default_name = 'Joe Bloggs'
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/api/', methods=['GET', 'POST'])
 def mainpage():
     name = default_name
     name_hash = None
@@ -22,18 +22,18 @@ def mainpage():
     <input type="submit" value="submit">
     </form>
     <p>You look like a:
-    <img src="/monster/{1}"/>
+    <img src="/api/monster/{1}"/>
     '''.format(name, name_hash)
     footer = '</body></html>'
     return header + body + footer
 
-@app.route('/monster/<name>')
+@app.route('/api/monster/<name>')
 
 def get_identicon( name ):
     image = cache.get( name )
     if image is None:
         print( "Cache miss (промах кэша)", flush=True )
-        r = requests.get( 'http://dnmonster:8080/monster/' + name + '?size=80' )
+        r = requests.get( 'http://192.168.1.50:8080' + name + '?size=80' )
         image = r.content
         cache.set( name, image )
     return Response( image, mimetype='image/png' )
