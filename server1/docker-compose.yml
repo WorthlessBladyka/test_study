@@ -1,6 +1,7 @@
 services:
   app:
     build: ./exercise1
+    container_name: app
     networks:
       - identidock-net
     environment:
