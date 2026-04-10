@@ -1,5 +1,0 @@
-python-multipart
-fastapi
-uvicorn
-httpx
-redis
