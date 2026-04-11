@@ -4,7 +4,7 @@ import hashlib
 import redis
 
 app = Flask(__name__)
-cache = redis.StrictRedis( host='redis', port=6379, db=0 )
+cache = redis.StrictRedis( host='192.168.1.50', port=6379, db=0 )
 salt = "UNIQUE_SALT"
 default_name = 'Joe Bloggs'
 
@@ -33,7 +33,7 @@ def get_identicon( name ):
     image = cache.get( name )
     if image is None:
         print( "Cache miss (промах кэша)", flush=True )
-        r = requests.get( 'http://dnmonster:8080/monster/' + name + '?size=80' )
+        r = requests.get( 'http://192.168.1.24:8080/monster/' + name + '?size=80' )
         image = r.content
         cache.set( name, image )
     return Response( image, mimetype='image/png' )

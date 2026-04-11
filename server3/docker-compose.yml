@@ -1,0 +1,11 @@
+services:
+  dnmonster:
+    image: amouat/dnmonster:1.1
+    ports:
+      - "8080:8080"
+    networks:
+      - identidock-net
+networks:
+  identidock-net:
+    driver: bridge
+    external: true 

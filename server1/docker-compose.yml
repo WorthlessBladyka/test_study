@@ -1,14 +1,6 @@
 services:
-  redis:
-    image: redis:7.4
-    networks:
-      - identidock-net
-  dnmonster:
-    image: amouat/dnmonster:1.1
-    networks:
-      - identidock-net
   app:
-    build: .
+    build: ./application/
     container_name: app
     networks:
       - identidock-net
@@ -17,7 +9,7 @@ services:
     environment:
       ENV: DEV
   reverse-proxy:
-    build: ../reverse-proxy/
+    build: ./reverse-proxy/
     container_name: reverse-proxy
     networks:
       - identidock-net
