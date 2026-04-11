@@ -4,13 +4,13 @@ USER root
 
 RUN apk update && \
 apk add nginx && \
-mkdir -m 755 /etc/nginx/sites-avalibles/ /etc/nginx/sites-enabled/ && \
+mkdir -m 755 /etc/nginx/sites-avalible/ /etc/nginx/sites-enabled/ && \
 chown -R nginx:nginx /run/nginx/
 
 COPY ./nginx /etc/nginx/
-COPY ./nginx/sites-avalibles /etc/nginx/sites-avalibles
+COPY ./nginx/sites-avalible /etc/nginx/sites-avalible
 
-RUN ln -sf /etc/nginx/sites-avalibles/proxy.conf /etc/nginx/sites-enabled/
+RUN ln -sf /etc/nginx/sites-avalible/proxy.conf /etc/nginx/sites-enabled/
 
 EXPOSE 80
 
