@@ -1,0 +1,70 @@
+- name: Update
+  ansible.builtin.apt:
+    update_cache: true
+- name: Add the directory for repo kubernetes
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: '0644'
+- name: Install preliminary
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: false
+- name: Ensure keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+- name: Download and add Kubernetes GPG key
+  ansible.builtin.apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key
+    state: present
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+- name: Add repo
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /
+    state: present
+    filename: kubernetes
+    update_cache: true
+- name: Install common components
+  ansible.builtin.apt:
+    name:
+      - bash-completion
+      - python3
+      - tar
+      - containerd
+      - nfs-common
+      - chrony
+    state: present
+    update_cache: false
+- name: Install kubectl
+  ansible.builtin.script:
+    cmd: files/install_kubectl.sh
+- name: Create kubelet directory
+  ansible.builtin.file:
+    path: /var/lib/kubelet
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+- name: Install kubeadm and kubelet
+  ansible.builtin.script:
+    cmd: files/install_core.sh
+- name: Enabled NTP
+  ansible.builtin.systemd_service:
+    state: started
+    name: chronyd
+- name: Enabled containerd
+  ansible.builtin.systemd_service:
+    state: started
+    name: containerd
+- name: Copy conf crictl
+  ansible.builtin.copy:
+    src: files/crictl.yml
+    dest: /etc/crictl.yml
+    mode: '0644'

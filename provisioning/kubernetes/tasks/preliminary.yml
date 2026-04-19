@@ -1,0 +1,30 @@
+- name: Disable swap
+  ansible.builtin.command:
+    cmd: swapoff -a
+- name: Disable AppArmor
+  ansible.builtin.service:
+    name: apparmor
+    state: stopped
+- name: Clear all role iptables
+  ansible.builtin.command:
+    cmd: iptables -F
+- name: Delete users role iptables
+  ansible.builtin.command:
+    cmd: iptables -X
+- name: Load module core br_netfilter
+  ansible.builtin.command:
+    cmd: modprobe br_netfilter
+- name: Copy loader modules-k8s
+  ansible.builtin.copy:
+    src: files/modules-kubernetes.conf
+    dest: /etc/modules-load.d/modules-kubernetes.conf
+    owner: root
+    group: root
+    mode: '0644'
+- name: Copy conf sysctl
+  ansible.builtin.copy:
+    src: files/sysctl.conf
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: '0644'
